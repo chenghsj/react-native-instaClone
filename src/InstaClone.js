@@ -1,72 +1,80 @@
 import React, { useState, useRef } from "react";
 import {
-  Dimensions,
   StyleSheet,
   Text,
   View,
-  Image,
-  TouchableWithoutFeedback
+  StatusBar,
+  ScrollView,
+  RefreshControl
 } from "react-native";
-import IonIcon from "react-native-vector-icons/Ionicons";
-import UserPic from "./UserPic";
-import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { initialState } from "./picData";
-import DoubleClick from "react-native-double-click";
-import * as Animatable from "react-native-animatable";
+import PostFeed from "./components/container/PostFeed";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialIcon from "react-native-vector-icons/MaterialIcons";
+import { initialState } from "./initialData";
 
-const AnimatedIcon = Animatable.createAnimatableComponent(MaterialIcon);
-const dimensions = Dimensions.get("window");
-const imageWidth = Math.floor(dimensions.width);
-const border = {
-  borderWidth: 1,
-  borderColor: "white"
-};
-const pulse = {
-  0: { scale: 0.5 },
-  1: { scale: 1 }
+const wait = timeout => {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeout);
+  });
 };
 
 const InstaClone = () => {
+  const ScrollToTopRef = useRef(null);
   const [state, setState] = useState({
-    picData: initialState(3),
-    liked: false,
-    animation: null
+    initialData: initialState(5),
+    refreshing: false
   });
-  const handleTextRef = useRef(null);
-  const { picData, liked, animation } = state;
-
-  const handleDoublePress = () => {
-    setTimeout(() => {
-      setState({ liked: true });
-      handleTextRef.current.animate({
-        0: { scale: 0.5 },
-        1: { scale: 1 }
-      });
-    }, 200);
-  };
-  const handlePress = () => {
-    setState({ liked: !liked });
-    handleTextRef.current.animate({
-      0: { scale: 0.5 },
-      1: { scale: 1 }
-    });
+  const { initialData, refreshing } = state;
+  const onRefresh = React.useCallback(() => {
+    setState({ refreshing: true, loading: true });
+    wait(2000).then(() =>
+      setState({
+        initialData: initialState(5),
+        refreshing: false
+      })
+    );
+  }, [refreshing]);
+  const goToTop = () => {
+    ScrollToTopRef.current.scrollTo({ x: 0, y: 0 });
   };
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" />
       <View style={styles.Nav}>
-        <Text style={{ color: "white" }}>Instagram</Text>
+        <Text
+          style={{
+            fontFamily: "grand-hotel",
+            color: "white",
+            fontSize: 25
+          }}
+        >
+          InstaClone
+        </Text>
       </View>
-
-      <View style={{ flex: 9, width: "100%" }}>
-        <UserPic
-          handleDoublePress={handleDoublePress}
-          handlePress={handlePress}
-          handleTextRef={handleTextRef}
-          liked={liked}
+      <View style={styles.posts}>
+        <ScrollView
+          ref={ScrollToTopRef}
+          refreshControl={
+            <RefreshControl
+              tintColor="white"
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
+        >
+          <PostFeed initialData={initialData} />
+        </ScrollView>
+      </View>
+      <View style={styles.footer}>
+        <MaterialCommunityIcons
+          onPress={goToTop}
+          name="home"
+          color="white"
+          size={30}
         />
+        <MaterialIcon name="person-outline" color="white" size={30} />
       </View>
-      <View style={styles.footer}></View>
     </View>
   );
 };
@@ -79,24 +87,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     height: "100%",
-    marginTop: 20,
     backgroundColor: "#2f2f2f"
   },
   Nav: {
-    flex: 1,
+    flex: 0.8,
     width: "100%",
-    height: 40,
+    marginTop: 20,
     borderBottomColor: "#737373",
     borderBottomWidth: StyleSheet.hairlineWidth,
     alignItems: "center",
     justifyContent: "center"
   },
-
+  posts: {
+    flex: 9,
+    width: "100%"
+  },
   footer: {
-    flex: 1,
+    flex: 0.8,
+    flexDirection: "row",
     width: "100%",
-    height: 40,
     borderTopColor: "#737373",
-    borderTopWidth: StyleSheet.hairlineWidth
+    borderTopWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: 15,
+    alignItems: "center",
+    justifyContent: "space-around"
   }
 });
