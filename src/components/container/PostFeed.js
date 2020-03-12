@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import { FlatList, RefreshControl } from "react-native";
-import { initialState, randNum } from "../../initialData";
+import { randNum } from "../../initialData";
 import Post from "../presentation/Post";
 
 const PostFeed = props => {
