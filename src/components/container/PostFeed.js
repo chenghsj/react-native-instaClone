@@ -1,6 +1,5 @@
 import React from "react";
-import { FlatList, RefreshControl } from "react-native";
-import { randNum } from "../../initialData";
+import { FlatList } from "react-native";
 import Post from "../presentation/Post";
 
 const PostFeed = props => {
@@ -12,10 +11,13 @@ const PostFeed = props => {
       keyExtractor={item => item.key}
       renderItem={({ item }) => (
         <Post
+          avatar={item.avatar}
+          id={item.id}
+          likes={item.likes}
           key={item.key}
           username={item.username}
           img={item.img}
-          randNum={randNum()}
+          description={item.description}
         />
       )}
     />

@@ -1,33 +1,46 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { MainStackScreen, ProfileStackScreen } from "./StackNav";
 
-const Footer = props => {
-  const { goToTop } = props;
+const Tab = createBottomTabNavigator();
+
+const Footer = () => {
   return (
-    <View style={styles.container}>
-      <MaterialCommunityIcons
-        onPress={goToTop}
-        name="home"
-        color="white"
-        size={30}
-      />
-      <MaterialIcon name="person-outline" color="white" size={30} />
-    </View>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          size = 30;
+          if (route.name === "Main") {
+            iconName = focused ? "home" : "home-outline";
+            return (
+              <MaterialCommunityIcons
+                name={iconName}
+                size={size}
+                color={color}
+              />
+            );
+          } else if (route.name === "Profile") {
+            iconName = focused ? "person" : "person-outline";
+            return <MaterialIcon name={iconName} size={size} color={color} />;
+          }
+        }
+      })}
+      tabBarOptions={{
+        showLabel: false,
+        activeTintColor: "white",
+        inactiveTintColor: "white",
+        style: {
+          backgroundColor: "#2f2f2f"
+        }
+      }}
+    >
+      <Tab.Screen name="Main" component={MainStackScreen} />
+      <Tab.Screen name="Profile" component={ProfileStackScreen} />
+    </Tab.Navigator>
   );
 };
 
 export default Footer;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "row",
-    borderTopColor: "#737373",
-    borderTopWidth: StyleSheet.hairlineWidth,
-    paddingHorizontal: 15,
-    alignItems: "center",
-    justifyContent: "space-around"
-  }
-});

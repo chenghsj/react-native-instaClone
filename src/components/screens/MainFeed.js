@@ -8,49 +8,43 @@ import {
   RefreshControl
 } from "react-native";
 import PostFeed from "../container/PostFeed";
-import Footer from "./Footer";
 import { initialState } from "../../initialData";
+import { useScrollToTop } from "@react-navigation/native";
 
-const wait = timeout => {
-  return new Promise(resolve => {
-    setTimeout(resolve, timeout);
-  });
-};
+// const wait = timeout => {
+//   return new Promise(resolve => {
+//     setTimeout(resolve, timeout);
+//   });
+// };
 
-const MainFeed = props => {
-  const ScrollToTopRef = useRef(null);
+const MainFeed = () => {
+  const goToTopRef = React.useRef(null);
   const [state, setState] = useState({
-    initialData: initialState(5),
-    refreshing: false,
-    scrollPosition: null
+    initialData: [],
+    refreshing: false
   });
-  const { navigation } = props;
-  const { initialData, refreshing, scrollPosition } = state;
+
   useEffect(() => {
-    const goToTop = navigation.addListener("tabPress", e => {
-      ScrollToTopRef.current.scrollTo({ x: 0, y: 0 });
-    });
-    // const currentPosition = navigation.addListener('willBlur', e=> {
-    //     const offset = scrollPosition
-    //     setTimeout(()=> {
-    //         ScrollView.scrollToOffset({offset, animated: false})
-    //     })
-    // })
-    return goToTop;
-  }, [navigation]);
-  const handleScrollPosition = e => {
-    setState({ scrollPosition: e.nativeEvent.contentOffset.y });
-  };
+    const fetchData = async () => {
+      setState({ initialData: await initialState(5), refreshing: false });
+    };
+    fetchData();
+  }, []);
+
+  const { initialData, refreshing } = state;
+
   const onRefresh = React.useCallback(() => {
-    setState({ refreshing: true, loading: true });
-    wait(2000).then(() =>
-      setState({
-        initialData: initialState(5),
-        refreshing: false
-      })
-    );
+    setState({ refreshing: true });
+    const fetchData = async () => {
+      const photos = await initialState(5);
+      setState({ initialData: photos, refreshing: false });
+    };
+    fetchData();
   }, [refreshing]);
 
+  useScrollToTop(goToTopRef);
+
+  // console.log(initialData);
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -67,8 +61,7 @@ const MainFeed = props => {
       </View>
       <View style={styles.posts}>
         <ScrollView
-          //   onScroll={handleScrollPosition}
-          ref={ScrollToTopRef}
+          ref={goToTopRef}
           refreshControl={
             <RefreshControl
               tintColor="white"

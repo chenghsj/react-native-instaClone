@@ -37,7 +37,7 @@ const Post = props => {
     isShow: false
   });
   const { liked, isShow } = state;
-  const { img, randNum, username } = props;
+  const { img, username, likes, avatar, description } = props;
 
   const handleDoublePress = () => {
     setTimeout(() => {
@@ -63,13 +63,13 @@ const Post = props => {
     });
   };
   return (
-    <View style={{ flex: 9, width: "100%" }}>
+    <View style={{ width: "100%", marginVertical: 6 }}>
       <View style={styles.userBar}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
             style={styles.avatar}
             source={{
-              uri: defaultAvatar
+              uri: avatar
             }}
           />
           <Text style={{ color: "white", fontSize: 15 }}>{username}</Text>
@@ -127,8 +127,11 @@ const Post = props => {
       </View>
       <View style={styles.commentBar}>
         <Text style={{ color: "white", fontSize: 15 }}>{`${
-          liked ? randNum + 1 : randNum
+          liked ? likes + 1 : likes
         } likes`}</Text>
+        <Text style={{ color: "white", fontSize: 15, marginTop: 6 }}>
+          {description}
+        </Text>
       </View>
     </View>
   );
