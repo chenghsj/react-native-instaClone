@@ -7,6 +7,7 @@ import {
   Image,
   TouchableWithoutFeedback
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import config from "../../config/index";
 import DoubleClick from "react-native-double-click";
 import * as Animatable from "react-native-animatable";
@@ -26,22 +27,26 @@ const pulse = {
   0: { scale: 0.5 },
   1: { scale: 1 }
 };
-// const defaultPic = config.img.pic;
-const defaultAvatar = config.img.avatar;
 const rowHeight = config.styleConstants.rowHeight;
 const paddingHorizontal = config.styleConstants.paddingHorizontal;
 
 const Post = props => {
   const [state, setState] = useState({
     liked: false,
+    isBookmarked: false,
     isShow: false
   });
-  const { liked, isShow } = state;
+  const { liked, isShow, isBookmarked } = state;
   const { img, username, likes, avatar, description } = props;
+
+  const navigation = useNavigation();
+  const heartIconRef = useRef(null);
+  const picHeartIconRef = useRef(null);
+  const bookmarkIconRef = useRef(null);
 
   const handleDoublePress = () => {
     setTimeout(() => {
-      setState({ liked: true, isShow: true });
+      setState({ ...state, liked: true, isShow: true });
       heartIconRef.current.animate(pulse);
       picHeartIconRef.current.animate({
         0: { scale: 0.5, opacity: 0 },
@@ -53,17 +58,17 @@ const Post = props => {
       });
     }, 200);
   };
-  const heartIconRef = useRef(null);
-  const picHeartIconRef = useRef(null);
-  const handlePress = () => {
-    setState({ liked: !liked });
-    heartIconRef.current.animate({
-      0: { scale: 0.5 },
-      1: { scale: 1 }
-    });
+
+  const handleHeartPress = () => {
+    setState({ ...state, liked: !liked });
+    heartIconRef.current.animate(pulse);
+  };
+  const handleBookmarkPress = () => {
+    setState({ ...state, isBookmarked: !isBookmarked });
+    bookmarkIconRef.current.animate(pulse);
   };
   return (
-    <View style={{ width: "100%", marginVertical: 6 }}>
+    <View style={{ marginVertical: 6 }}>
       <View style={styles.userBar}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
@@ -72,7 +77,14 @@ const Post = props => {
               uri: avatar
             }}
           />
-          <Text style={{ color: "white", fontSize: 15 }}>{username}</Text>
+          <Text
+            style={{ color: "white", fontSize: 15 }}
+            onPress={() => {
+              navigation.push("UserProfile", { username, avatar });
+            }}
+          >
+            {username}
+          </Text>
         </View>
         <IonIcon name="ios-more" size={20} color="white" />
       </View>
@@ -102,14 +114,14 @@ const Post = props => {
       </DoubleClick>
       <View style={styles.userFooter}>
         <View style={{ flexDirection: "row" }}>
-          <TouchableWithoutFeedback onPress={handlePress}>
+          <TouchableWithoutFeedback onPress={handleHeartPress}>
             <Animatable.Text
               ref={heartIconRef}
               duration={200}
               style={{ marginRight: 10 }}
             >
               <MaterialCommunityIcons
-                onPress={handlePress}
+                onPress={handleHeartPress}
                 style={[liked ? styles.likedHeartIcon : styles.icon]}
                 name={liked ? "heart" : "heart-outline"}
               />
@@ -119,10 +131,14 @@ const Post = props => {
           <MaterialCommunityIcons style={styles.icon} name="send" />
         </View>
         <View>
-          <MaterialCommunityIcons
-            style={[styles.icon, { marginRight: 0 }]}
-            name="bookmark-outline"
-          />
+          <TouchableWithoutFeedback onPress={handleBookmarkPress}>
+            <Animatable.Text ref={bookmarkIconRef} duration={200}>
+              <MaterialCommunityIcons
+                style={[styles.icon, { marginRight: 0 }]}
+                name={isBookmarked ? "bookmark" : "bookmark-outline"}
+              />
+            </Animatable.Text>
+          </TouchableWithoutFeedback>
         </View>
       </View>
       <View style={styles.commentBar}>
@@ -142,7 +158,6 @@ export default Post;
 const styles = StyleSheet.create({
   userBar: {
     flexDirection: "row",
-    width: "100%",
     height: rowHeight,
     justifyContent: "space-between",
     alignItems: "center",

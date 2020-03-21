@@ -1,4 +1,5 @@
 import MainFeed from "./MainFeed";
-import Profile from "./Profile";
+import UserProfile from "./UserProfile";
+import PersonalProfile from "./PersonalProfile";
 
-export { MainFeed, Profile };
+export { MainFeed, UserProfile, PersonalProfile };

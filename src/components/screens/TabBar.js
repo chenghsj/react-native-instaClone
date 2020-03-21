@@ -1,4 +1,5 @@
 import React from "react";
+import { StyleSheet } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -22,7 +23,7 @@ const Footer = () => {
                 color={color}
               />
             );
-          } else if (route.name === "Profile") {
+          } else if (route.name === "PersonalProfile") {
             iconName = focused ? "person" : "person-outline";
             return <MaterialIcon name={iconName} size={size} color={color} />;
           }
@@ -33,12 +34,13 @@ const Footer = () => {
         activeTintColor: "white",
         inactiveTintColor: "white",
         style: {
-          backgroundColor: "#2f2f2f"
+          backgroundColor: "#2f2f2f",
+          borderTopColor: "#737373"
         }
       }}
     >
       <Tab.Screen name="Main" component={MainStackScreen} />
-      <Tab.Screen name="Profile" component={ProfileStackScreen} />
+      <Tab.Screen name="PersonalProfile" component={ProfileStackScreen} />
     </Tab.Navigator>
   );
 };

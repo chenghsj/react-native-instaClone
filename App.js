@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
-import Footer from "./src/components/screens/Footer";
+import TabBar from "./src/components/screens/TabBar";
 import * as Font from "expo-font";
 import { AppLoading } from "expo";
 import { NavigationContainer } from "@react-navigation/native";
@@ -26,7 +26,7 @@ export default function App() {
   return (
     <NavigationContainer style={styles.container}>
       {/* <StackNav /> */}
-      <Footer />
+      <TabBar />
     </NavigationContainer>
   );
 }
