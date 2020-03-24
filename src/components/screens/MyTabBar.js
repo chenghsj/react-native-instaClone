@@ -37,6 +37,7 @@ const iconMap = (routeName, focused, stateIndex, iconRef) => {
 };
 
 function MyTabBar(props) {
+  console.log("props: ", props);
   const iconRef = useRef(null);
   const { state, navigation } = props;
   console.log("navigation: ", navigation);

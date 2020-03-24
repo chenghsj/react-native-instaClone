@@ -6,20 +6,26 @@ const MainStack = createStackNavigator();
 
 export const MainStackScreen = () => {
   return (
-    <MainStack.Navigator>
+    <MainStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#2f2f2f",
+          borderBottomColor: "#737373",
+          height: 70
+        },
+        safeAreaInsets: { top: 10 }
+      }}
+    >
       <MainStack.Screen
         name="Main"
         options={{
           headerMode: "screen",
           headerTitle: "InstaClone",
-          headerStyle: {
-            backgroundColor: "#2f2f2f",
-            borderBottomColor: "#737373"
-          },
           headerTitleStyle: {
             fontFamily: "grand-hotel",
             color: "white",
-            fontSize: 25
+            fontSize: 25,
+            paddingTop: 10
           }
         }}
       >
@@ -36,10 +42,7 @@ export const MainStackScreen = () => {
               color: "white",
               fontSize: 20
             },
-            headerStyle: {
-              backgroundColor: "#2f2f2f",
-              borderBottomColor: "#737373"
-            },
+
             headerBackTitleVisible: false,
             headerTintColor: "white"
           };
@@ -61,13 +64,15 @@ export const ProfileStackScreen = () => {
           headerMode: "screen",
           headerStyle: {
             backgroundColor: "#2f2f2f",
-            borderBottomColor: "#737373"
+            borderBottomColor: "#737373",
+            height: 70
           },
           headerTitle: "PersonalProfile",
           headerTitleStyle: {
             color: "white",
             fontSize: 20
-          }
+          },
+          safeAreaInsets: { top: 10 }
         }}
         name="PersonalProfile"
       >
