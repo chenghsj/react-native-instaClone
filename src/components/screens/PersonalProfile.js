@@ -55,7 +55,7 @@ const PersonalProfile = props => {
       <ScrollView ref={goToTopRef} style={{ width: "100%", height: "100%" }}>
         <View style={styles.info}>
           <Image
-            source={{ uri: avatar }}
+            source={require("../../../assets/avatar.png")}
             style={{
               width: 80,
               height: 80,
@@ -78,7 +78,7 @@ const PersonalProfile = props => {
           </View>
         </View>
         <Text style={{ color: "white", marginLeft: 25, marginBottom: 20 }}>
-          {username}
+          Username
         </Text>
         <View style={styles.imageList}>
           <FlatList

@@ -70,22 +70,35 @@ const Post = props => {
   return (
     <View style={{ marginVertical: 6 }}>
       <View style={styles.userBar}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image
-            style={styles.avatar}
-            source={{
-              uri: avatar
-            }}
-          />
-          <Text
-            style={{ color: "white", fontSize: 15 }}
-            onPress={() => {
-              navigation.push("UserProfile", { username, avatar });
+        <TouchableWithoutFeedback
+          onPress={() => {
+            navigation.push("UserProfile", { username, avatar });
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center"
             }}
           >
-            {username}
-          </Text>
-        </View>
+            <Image
+              style={styles.avatar}
+              source={{
+                uri: avatar
+              }}
+            />
+            <Text
+              style={{
+                color: "white",
+                fontSize: 15,
+                width: imageWidth / 2
+              }}
+            >
+              {username}
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
         <IonIcon name="ios-more" size={20} color="white" />
       </View>
       <DoubleClick onClick={handleDoublePress}>

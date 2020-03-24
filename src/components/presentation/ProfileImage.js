@@ -5,127 +5,92 @@ import {
   View,
   Image,
   Dimensions,
-  TouchableWithoutFeedback,
-  Animated
+  TouchableWithoutFeedback
 } from "react-native";
-import Overlay from "react-native-modal-overlay";
+import Modal from "react-native-modal";
 
 const dimensions = Dimensions.get("window");
 const imageWidth = dimensions.width * 0.333;
 
 const ProfileImage = props => {
   const [state, setState] = useState({
-    isScale: false,
-    scaleAnim: new Animated.Value(1),
-    isOverlay: false
+    isModalVisible: false
   });
-  const { isScale, scaleAnim, isOverlay } = state;
+  const { isModalVisible } = state;
   const { img, username, avatar } = props;
   const handlePress = () => {
-    setState({ isOverlay: true });
+    setState({ isModalVisible: !isModalVisible });
   };
-  const handleClose = () => {
-    setState({ isOverlay: false });
-  };
-  // const handleScaleAnimPress = () => {
-  //   setState({ ...state, isScale: !isScale });
-  //   isScale
-  //     ? Animated.timing(scaleAnim, {
-  //         toValue: 2,
-  //         duration: 300
-  //       }).start()
-  //     : Animated.timing(scaleAnim, {
-  //         toValue: 1,
-  //         duration: 300
-  //       }).start();
-  // };
-  const scaleAnimStyles = {
-    transform: [
-      {
-        scale: scaleAnim
-      }
-    ]
-  };
+
   return (
-    <TouchableWithoutFeedback onPress={handlePress}>
-      {isOverlay ? (
-        <>
-          <Overlay
-            visible={isOverlay}
-            onClose={handleClose}
-            closeOnTouchOutside
-            animationDuration={300}
-            animationType="zoomIn"
-            containerStyle={{
-              backgroundColor: "rgba(0,0,0,0.9)"
-            }}
-            childrenWrapperStyle={{
-              borderRadius: 15,
-              width: 250,
-              height: 285,
-              backgroundColor: "#2f2f2f"
-            }}
-          >
-            <View
-              style={{
-                marginVertical: 10,
-                marginHorizontal: 10,
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center"
-              }}
-            >
-              <Image
-                onPress={handleClose}
-                source={{ uri: avatar }}
-                style={{ width: 25, height: 25, borderRadius: 50 }}
-              />
-              <Text style={{ color: "white", marginLeft: 10 }}>{username}</Text>
+    <>
+      <TouchableWithoutFeedback onPress={handlePress}>
+        <Image style={styles.ProfileImage} source={{ uri: img }} />
+      </TouchableWithoutFeedback>
+      <Modal
+        isVisible={isModalVisible}
+        animationIn="zoomIn"
+        animationOut="zoomOut"
+        animationInTiming={300}
+        animationOutTiming={300}
+        backdropTransitionInTiming={300}
+        backdropTransitionOutTiming={0}
+        backdropOpacity={0.9}
+        onBackdropPress={handlePress}
+        swipeDirection={["up", "down"]}
+        onSwipeComplete={() => setState({ isModalVisible: false })}
+        style={{ alignItems: "center" }}
+      >
+        <TouchableWithoutFeedback onPress={handlePress}>
+          <View style={styles.ModalContainer}>
+            <View style={styles.ModalHeader}>
+              <Image source={{ uri: avatar }} style={styles.ModalAvatar} />
+              <Text style={styles.ModalUserName}>{username}</Text>
             </View>
-            <Image
-              style={[
-                {
-                  resizeMode: "cover",
-                  width: 250,
-                  height: 250,
-                  borderTopLeftRadius: 0,
-                  borderTopRightRadius: 0,
-                  borderBottomLeftRadius: 15,
-                  borderBottomRightRadius: 15
-                }
-              ]}
-              source={{ uri: img }}
-            />
-          </Overlay>
-          <Image
-            style={[
-              {
-                width: imageWidth,
-                height: imageWidth,
-                marginHorizontal: 0.5,
-                marginVertical: 0.5
-              }
-            ]}
-            source={{ uri: img }}
-          />
-        </>
-      ) : (
-        <Image
-          style={[
-            {
-              width: imageWidth,
-              height: imageWidth,
-              marginHorizontal: 0.5,
-              marginVertical: 0.5
-            }
-          ]}
-          source={{ uri: img }}
-        />
-      )}
-    </TouchableWithoutFeedback>
+            <Image style={styles.ModalImage} source={{ uri: img }} />
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    </>
   );
 };
-// https://source.unsplash.com/random/300x300
 export default ProfileImage;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  ProfileImage: {
+    width: imageWidth,
+    height: imageWidth,
+    marginHorizontal: 0.6,
+    marginVertical: 0.6
+  },
+  ModalContainer: {
+    backgroundColor: "#2f2f2f",
+    borderRadius: 15,
+    height: 285
+  },
+  ModalHeader: {
+    marginVertical: 10,
+    paddingHorizontal: 10,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center"
+  },
+  ModalAvatar: {
+    width: 25,
+    height: 25,
+    borderRadius: 12.5
+  },
+  ModalUserName: {
+    color: "white",
+    marginLeft: 10
+  },
+  ModalImage: {
+    resizeMode: "cover",
+    width: 250,
+    height: 250,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15
+  }
+});

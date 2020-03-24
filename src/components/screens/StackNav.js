@@ -1,8 +1,6 @@
 import React from "react";
-import { StyleSheet, Button } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { MainFeed, UserProfile, PersonalProfile } from "./index";
-import { PersonalProfileState } from "../../initialData";
 
 const MainStack = createStackNavigator();
 
