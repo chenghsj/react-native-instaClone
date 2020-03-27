@@ -29,6 +29,9 @@ const pulse = {
 };
 const rowHeight = config.styleConstants.rowHeight;
 const paddingHorizontal = config.styleConstants.paddingHorizontal;
+const AnimMaterialCommunityIcons = Animatable.createAnimatableComponent(
+  MaterialCommunityIcons
+);
 
 const Post = props => {
   const [state, setState] = useState({
@@ -67,6 +70,7 @@ const Post = props => {
     setState({ ...state, isBookmarked: !isBookmarked });
     bookmarkIconRef.current.animate(pulse);
   };
+
   return (
     <View style={{ marginVertical: 6 }}>
       <View style={styles.userBar}>
@@ -75,83 +79,49 @@ const Post = props => {
             navigation.push("UserProfile", { username, avatar });
           }}
         >
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Image
               style={styles.avatar}
               source={{
                 uri: avatar
               }}
             />
-            <Text
-              style={{
-                color: "white",
-                fontSize: 15,
-                width: imageWidth / 2
-              }}
-            >
-              {username}
-            </Text>
+            <Text style={styles.username}>{username}</Text>
           </View>
         </TouchableWithoutFeedback>
         <IonIcon name="ios-more" size={20} color="white" />
       </View>
       <DoubleClick onClick={handleDoublePress}>
         {isShow && (
-          <TouchableWithoutFeedback
-            style={{ width: imageWidth, height: imageWidth }}
-          >
-            <Animatable.Text
-              ref={picHeartIconRef}
-              duration={1000}
-              style={{
-                position: "absolute",
-                alignSelf: "center",
-                zIndex: 2,
-                top: "40%"
-              }}
-            >
-              <MaterialCommunityIcons
-                name="heart"
-                style={[styles.icon, { fontSize: 80 }]}
-              />
-            </Animatable.Text>
-          </TouchableWithoutFeedback>
+          <AnimMaterialCommunityIcons
+            name="heart"
+            ref={picHeartIconRef}
+            duration={1000}
+            style={styles.picLikedHeartIcon}
+          />
         )}
         <Image style={styles.img} source={{ uri: img }} />
       </DoubleClick>
       <View style={styles.userFooter}>
         <View style={{ flexDirection: "row" }}>
-          <TouchableWithoutFeedback onPress={handleHeartPress}>
-            <Animatable.Text
-              ref={heartIconRef}
-              duration={200}
-              style={{ marginRight: 10 }}
-            >
-              <MaterialCommunityIcons
-                onPress={handleHeartPress}
-                style={[liked ? styles.likedHeartIcon : styles.icon]}
-                name={liked ? "heart" : "heart-outline"}
-              />
-            </Animatable.Text>
-          </TouchableWithoutFeedback>
+          <AnimMaterialCommunityIcons
+            onPress={handleHeartPress}
+            ref={heartIconRef}
+            duration={200}
+            style={liked ? styles.likedHeartIcon : styles.icon}
+            name={liked ? "heart" : "heart-outline"}
+          />
           <MaterialCommunityIcons style={styles.icon} name="comment-outline" />
           <MaterialCommunityIcons style={styles.icon} name="send" />
         </View>
         <View>
-          <TouchableWithoutFeedback onPress={handleBookmarkPress}>
-            <Animatable.Text ref={bookmarkIconRef} duration={200}>
-              <MaterialCommunityIcons
-                style={[styles.icon, { marginRight: 0 }]}
-                name={isBookmarked ? "bookmark" : "bookmark-outline"}
-              />
-            </Animatable.Text>
-          </TouchableWithoutFeedback>
+          <AnimMaterialCommunityIcons
+            onPress={handleBookmarkPress}
+            ref={bookmarkIconRef}
+            duration={200}
+            style={[styles.icon, { marginRight: 0 }]}
+            name={isBookmarked ? "bookmark" : "bookmark-outline"}
+          />
         </View>
       </View>
       <View style={styles.commentBar}>
@@ -180,9 +150,14 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     marginRight: 10,
-    borderRadius: 25,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: "#737373"
+    borderRadius: 25
+    // borderWidth: StyleSheet.hairlineWidth,
+    // borderColor: "#737373"
+  },
+  username: {
+    color: "white",
+    fontSize: 15,
+    width: imageWidth / 2
   },
   img: {
     width: imageWidth,
@@ -192,6 +167,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "white",
     marginRight: 10
+  },
+  picLikedHeartIcon: {
+    fontSize: 80,
+    color: "white",
+    position: "absolute",
+    alignSelf: "center",
+    zIndex: 2,
+    top: "40%"
   },
   likedHeartIcon: {
     fontSize: 30,

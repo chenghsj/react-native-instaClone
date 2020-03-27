@@ -6,5 +6,9 @@ export default {
   styleConstants: {
     rowHeight: 50,
     paddingHorizontal: 15
+  },
+  fadeInAnim: {
+    0: { opacity: 0.5 },
+    1: { opacity: 1 }
   }
 };

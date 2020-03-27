@@ -1,19 +1,81 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import { StyleSheet } from "react-native";
+import {
+  createStackNavigator,
+  TransitionSpecs,
+  HeaderStyleInterpolators
+} from "@react-navigation/stack";
 import { MainFeed, UserProfile, PersonalProfile } from "./index";
 
+const config = {
+  animation: "timing",
+  config: {
+    duration: 500
+  }
+};
+const MyTransition = {
+  gestureDirection: "horizontal",
+  transitionSpec: {
+    open: config,
+    close: config
+  },
+  headerStyleInterpolator: HeaderStyleInterpolators.forFade,
+  cardStyleInterpolator: ({ current, next, layouts }) => {
+    return {
+      cardStyle: {
+        opacity: current.progress.interpolate({
+          inputRange: [0, 0.5, 1],
+          outputRange: [0, 0.25, 1]
+        }),
+        transform: [
+          {
+            translateX: current.progress.interpolate({
+              inputRange: [0, 1],
+              outputRange: [layouts.screen.width, 0]
+            })
+          },
+          {
+            rotate: current.progress.interpolate({
+              inputRange: [0, 1],
+              outputRange: [1, 0]
+            })
+          },
+          {
+            scale: next
+              ? next.progress.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [1, 0.9]
+                })
+              : 1
+          }
+        ]
+      },
+      overlayStyle: {
+        opacity: current.progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, 0.5]
+        })
+      }
+    };
+  }
+};
+
+const headerStyle = {
+  backgroundColor: "#2f2f2f",
+  borderBottomWidth: StyleSheet.hairlineWidth,
+  borderBottomColor: "#737373",
+  shadowOpacity: 0,
+  height: 70
+};
 const MainStack = createStackNavigator();
 
 export const MainStackScreen = () => {
   return (
     <MainStack.Navigator
       screenOptions={{
-        headerStyle: {
-          backgroundColor: "#2f2f2f",
-          borderBottomColor: "#737373",
-          height: 70
-        },
-        safeAreaInsets: { top: 10 }
+        headerStyle,
+        safeAreaInsets: { top: 20 }
+        // ...MyTransition
       }}
     >
       <MainStack.Screen
@@ -24,8 +86,7 @@ export const MainStackScreen = () => {
           headerTitleStyle: {
             fontFamily: "grand-hotel",
             color: "white",
-            fontSize: 25,
-            paddingTop: 10
+            fontSize: 25
           }
         }}
       >
@@ -42,7 +103,6 @@ export const MainStackScreen = () => {
               color: "white",
               fontSize: 20
             },
-
             headerBackTitleVisible: false,
             headerTintColor: "white"
           };
@@ -62,17 +122,13 @@ export const ProfileStackScreen = () => {
       <ProfileStack.Screen
         options={{
           headerMode: "screen",
-          headerStyle: {
-            backgroundColor: "#2f2f2f",
-            borderBottomColor: "#737373",
-            height: 70
-          },
+          headerStyle,
           headerTitle: "PersonalProfile",
           headerTitleStyle: {
             color: "white",
             fontSize: 20
           },
-          safeAreaInsets: { top: 10 }
+          safeAreaInsets: { top: 20 }
         }}
         name="PersonalProfile"
       >

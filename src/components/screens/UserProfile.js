@@ -53,22 +53,13 @@ const UserProfile = () => {
   return (
     <View style={styles.container}>
       <ScrollView ref={goToTopRef} style={{ width: "100%", height: "100%" }}>
-        {/* <View
-          style={[
-            StyleSheet.absoluteFill,
-            {
-              backgroundColor: "rgba(0,0,0,0.5)",
-              zIndex: 5
-            }
-          ]}
-        /> */}
         <View style={styles.info}>
           <Image
             source={{ uri: avatar }}
             style={{
               width: 80,
               height: 80,
-              borderRadius: 50
+              borderRadius: 40
             }}
           />
           <View style={{ flexDirection: "row" }}>

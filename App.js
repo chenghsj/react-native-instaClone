@@ -25,7 +25,6 @@ export default function App() {
 
   return (
     <NavigationContainer style={styles.container}>
-      {/* <StackNav /> */}
       <TabBar />
     </NavigationContainer>
   );
@@ -33,7 +32,6 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "center"
+    flex: 1
   }
 });

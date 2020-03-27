@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useScrollToTop } from "@react-navigation/native";
+import { useScrollToTop, useFocusEffect } from "@react-navigation/native";
+import * as Animatable from "react-native-animatable";
 import { PersonalProfileState } from "../../initialData";
 import ProfileImage from "../presentation/ProfileImage";
 import {
@@ -10,8 +11,12 @@ import {
   FlatList,
   Image
 } from "react-native";
+import config from "../../config";
+
+const fadeIn = config.fadeInAnim;
 
 const PersonalProfile = props => {
+  const PersonalProfileRef = useRef(null);
   const goToTopRef = useRef(null);
   const [state, setState] = useState({
     initialData: [],
@@ -42,66 +47,75 @@ const PersonalProfile = props => {
       following
     });
   };
-  // console.log(initialData);
 
   useEffect(() => {
     fetchData();
   }, []);
 
+  useFocusEffect(() => {
+    PersonalProfileRef.current.animate(fadeIn);
+  }, []);
+
   useScrollToTop(goToTopRef);
 
   return (
-    <View style={styles.container}>
-      <ScrollView ref={goToTopRef} style={{ width: "100%", height: "100%" }}>
-        <View style={styles.info}>
-          <Image
-            source={require("../../../assets/avatar.png")}
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: 50
-            }}
-          />
-          <View style={{ flexDirection: "row" }}>
-            <View style={{ alignItems: "center" }}>
-              <Text style={{ color: "white" }}>{photos}</Text>
-              <Text style={{ color: "white" }}>Posts</Text>
-            </View>
-            <View style={{ alignItems: "center", marginLeft: 10 }}>
-              <Text style={{ color: "white" }}>{followers}</Text>
-              <Text style={{ color: "white" }}>Followers</Text>
-            </View>
-            <View style={{ alignItems: "center", marginLeft: 10 }}>
-              <Text style={{ color: "white" }}>{following}</Text>
-              <Text style={{ color: "white" }}>Following</Text>
+    <Animatable.View
+      style={{ width: "100%", height: "100%" }}
+      ref={PersonalProfileRef}
+      duration={1000}
+    >
+      <View style={styles.container}>
+        <ScrollView ref={goToTopRef} style={{ width: "100%", height: "100%" }}>
+          <View style={styles.info}>
+            <Image
+              source={require("../../../assets/avatar.png")}
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: 50
+              }}
+            />
+            <View style={{ flexDirection: "row" }}>
+              <View style={{ alignItems: "center" }}>
+                <Text style={{ color: "white" }}>{photos}</Text>
+                <Text style={{ color: "white" }}>Posts</Text>
+              </View>
+              <View style={{ alignItems: "center", marginLeft: 10 }}>
+                <Text style={{ color: "white" }}>{followers}</Text>
+                <Text style={{ color: "white" }}>Followers</Text>
+              </View>
+              <View style={{ alignItems: "center", marginLeft: 10 }}>
+                <Text style={{ color: "white" }}>{following}</Text>
+                <Text style={{ color: "white" }}>Following</Text>
+              </View>
             </View>
           </View>
-        </View>
-        <Text style={{ color: "white", marginLeft: 25, marginBottom: 20 }}>
-          Username
-        </Text>
-        <View style={styles.imageList}>
-          <FlatList
-            horizontal={false}
-            numColumns={3}
-            data={initialData}
-            keyExtractor={item => item.key}
-            renderItem={({ item }) => (
-              <ProfileImage
-                {...item}
-                // avatar={item.avatar}
-                // id={item.id}
-                // likes={item.likes}
-                // key={item.key}
-                // username={item.username}
-                // img={item.img}
-                // description={item.description}
-              />
-            )}
-          />
-        </View>
-      </ScrollView>
-    </View>
+          <Text style={{ color: "white", marginLeft: 25, marginBottom: 20 }}>
+            Username
+          </Text>
+          <View style={styles.imageList}>
+            <FlatList
+              horizontal={false}
+              numColumns={3}
+              data={initialData}
+              keyExtractor={item => item.key}
+              renderItem={({ item }) => (
+                <ProfileImage
+                  {...item}
+                  // avatar={item.avatar}
+                  // id={item.id}
+                  // likes={item.likes}
+                  // key={item.key}
+                  // username={item.username}
+                  // img={item.img}
+                  // description={item.description}
+                />
+              )}
+            />
+          </View>
+        </ScrollView>
+      </View>
+    </Animatable.View>
   );
 };
 
