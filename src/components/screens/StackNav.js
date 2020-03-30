@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import {
   createStackNavigator,
-  TransitionSpecs,
   HeaderStyleInterpolators
 } from "@react-navigation/stack";
 import { MainFeed, UserProfile, PersonalProfile } from "./index";
@@ -74,7 +73,8 @@ export const MainStackScreen = () => {
     <MainStack.Navigator
       screenOptions={{
         headerStyle,
-        safeAreaInsets: { top: 20 }
+        safeAreaInsets: { top: 20 },
+        cardStyle: { backgroundColor: "#2f2f2f" }
         // ...MyTransition
       }}
     >

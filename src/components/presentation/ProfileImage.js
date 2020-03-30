@@ -31,9 +31,9 @@ const ProfileImage = props => {
         isVisible={isModalVisible}
         animationIn="zoomIn"
         animationOut="zoomOut"
-        animationInTiming={300}
-        animationOutTiming={300}
-        backdropTransitionInTiming={300}
+        animationInTiming={400}
+        animationOutTiming={400}
+        backdropTransitionInTiming={400}
         backdropTransitionOutTiming={0}
         backdropOpacity={0.9}
         onBackdropPress={handlePress}

@@ -13,6 +13,7 @@ import * as Animatable from "react-native-animatable";
 import config from "../../config";
 
 const fadeIn = config.fadeInAnim;
+const duration = config.fadeInDuration;
 
 const MainFeed = ({ Num }) => {
   const goToTopRef = useRef(null);
@@ -30,8 +31,8 @@ const MainFeed = ({ Num }) => {
   }, []);
 
   useFocusEffect(() => {
-    if (refreshing) return;
-    MainFeedRef.current.animate(fadeIn);
+    // if (refreshing) return;
+    MainFeedRef.current.animate(fadeIn, duration);
   }, []);
 
   const onRefresh = React.useCallback(() => {
@@ -42,27 +43,31 @@ const MainFeed = ({ Num }) => {
   useScrollToTop(goToTopRef);
 
   return (
-    <Animatable.View
-      ref={MainFeedRef}
-      duration={1000}
-      style={{ width: "100%", height: "100%" }}
-    >
-      <View style={styles.container}>
-        <StatusBar barStyle="light-content" />
-        <ScrollView
-          ref={goToTopRef}
-          refreshControl={
-            <RefreshControl
-              tintColor="white"
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }
-        >
-          <PostFeed initialData={initialData} />
-        </ScrollView>
-      </View>
-    </Animatable.View>
+    <View style={styles.container}>
+      <Animatable.View
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%"
+        }}
+        ref={MainFeedRef}
+        easing="ease-in"
+      />
+      <StatusBar barStyle="light-content" />
+      <ScrollView
+        indicatorStyle="white"
+        ref={goToTopRef}
+        refreshControl={
+          <RefreshControl
+            tintColor="white"
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      >
+        <PostFeed initialData={initialData} />
+      </ScrollView>
+    </View>
   );
 };
 

@@ -8,7 +8,11 @@ export default {
     paddingHorizontal: 15
   },
   fadeInAnim: {
-    0: { opacity: 0.5 },
-    1: { opacity: 1 }
-  }
+    0: { backgroundColor: "rgba(3, 3, 3, 0.7)", zIndex: 2 },
+    0.9: { backgroundColor: "rgba(3, 3, 3, 0)", zIndex: 2 },
+    1: { backgroundColor: "rgba(3, 3, 3, 0)", zIndex: -1 }
+  },
+  fadeInDuration: 500
 };
+
+console.disableYellowBox = true;

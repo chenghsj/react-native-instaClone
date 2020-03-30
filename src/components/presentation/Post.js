@@ -27,6 +27,14 @@ const pulse = {
   0: { scale: 0.5 },
   1: { scale: 1 }
 };
+const pulseNew = {
+  0: { scale: 0.5, opacity: 0 },
+  0.3: { scale: 1.2, opacity: 1 },
+  0.6: { scale: 0.9, opacity: 1 },
+  0.7: { scale: 1, opacity: 1 },
+  0.9: { scale: 1, opacity: 1 },
+  1: { scale: 1, opacity: 1 }
+};
 const rowHeight = config.styleConstants.rowHeight;
 const paddingHorizontal = config.styleConstants.paddingHorizontal;
 const AnimMaterialCommunityIcons = Animatable.createAnimatableComponent(
@@ -50,25 +58,21 @@ const Post = props => {
   const handleDoublePress = () => {
     setTimeout(() => {
       setState({ ...state, liked: true, isShow: true });
-      heartIconRef.current.animate(pulse);
-      picHeartIconRef.current.animate({
-        0: { scale: 0.5, opacity: 0 },
-        0.3: { scale: 1.2, opacity: 1 },
-        0.6: { scale: 0.9, opacity: 1 },
-        0.7: { scale: 1, opacity: 1 },
-        0.9: { scale: 1, opacity: 1 },
-        1: { scale: 1, opacity: 0 }
-      });
+      heartIconRef.current.animate(pulseNew, 1000);
+      picHeartIconRef.current.animate(
+        { ...pulseNew, 1: { scale: 1, opacity: 0 } },
+        1000
+      );
     }, 200);
   };
 
   const handleHeartPress = () => {
     setState({ ...state, liked: !liked });
-    heartIconRef.current.animate(pulse);
+    heartIconRef.current.animate(pulseNew, 1000);
   };
   const handleBookmarkPress = () => {
     setState({ ...state, isBookmarked: !isBookmarked });
-    bookmarkIconRef.current.animate(pulse);
+    bookmarkIconRef.current.animate(pulse, 200);
   };
 
   return (
@@ -96,7 +100,6 @@ const Post = props => {
           <AnimMaterialCommunityIcons
             name="heart"
             ref={picHeartIconRef}
-            duration={1000}
             style={styles.picLikedHeartIcon}
           />
         )}
@@ -107,7 +110,6 @@ const Post = props => {
           <AnimMaterialCommunityIcons
             onPress={handleHeartPress}
             ref={heartIconRef}
-            duration={200}
             style={liked ? styles.likedHeartIcon : styles.icon}
             name={liked ? "heart" : "heart-outline"}
           />
@@ -118,7 +120,6 @@ const Post = props => {
           <AnimMaterialCommunityIcons
             onPress={handleBookmarkPress}
             ref={bookmarkIconRef}
-            duration={200}
             style={[styles.icon, { marginRight: 0 }]}
             name={isBookmarked ? "bookmark" : "bookmark-outline"}
           />
@@ -150,14 +151,14 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     marginRight: 10,
-    borderRadius: 25
-    // borderWidth: StyleSheet.hairlineWidth,
-    // borderColor: "#737373"
+    borderRadius: 25,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: "#737373"
   },
   username: {
     color: "white",
     fontSize: 15,
-    width: imageWidth / 2
+    width: imageWidth / 1.6
   },
   img: {
     width: imageWidth,
