@@ -120,7 +120,10 @@ const Post = props => {
           <AnimMaterialCommunityIcons
             onPress={handleBookmarkPress}
             ref={bookmarkIconRef}
-            style={[styles.icon, { marginRight: 0 }]}
+            style={[
+              isBookmarked ? styles.isBookmarkedIcon : styles.icon,
+              { marginRight: 0 }
+            ]}
             name={isBookmarked ? "bookmark" : "bookmark-outline"}
           />
         </View>
@@ -179,9 +182,12 @@ const styles = StyleSheet.create({
   },
   likedHeartIcon: {
     fontSize: 30,
-    color: "white",
     marginRight: 10,
     color: "#f64d6e"
+  },
+  isBookmarkedIcon: {
+    fontSize: 30,
+    color: "yellow"
   },
   userFooter: {
     flexDirection: "row",
