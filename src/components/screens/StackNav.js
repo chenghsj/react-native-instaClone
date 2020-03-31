@@ -6,58 +6,58 @@ import {
 } from "@react-navigation/stack";
 import { MainFeed, UserProfile, PersonalProfile } from "./index";
 
-const config = {
-  animation: "timing",
-  config: {
-    duration: 500
-  }
-};
-const MyTransition = {
-  gestureDirection: "horizontal",
-  transitionSpec: {
-    open: config,
-    close: config
-  },
-  headerStyleInterpolator: HeaderStyleInterpolators.forFade,
-  cardStyleInterpolator: ({ current, next, layouts }) => {
-    return {
-      cardStyle: {
-        opacity: current.progress.interpolate({
-          inputRange: [0, 0.5, 1],
-          outputRange: [0, 0.25, 1]
-        }),
-        transform: [
-          {
-            translateX: current.progress.interpolate({
-              inputRange: [0, 1],
-              outputRange: [layouts.screen.width, 0]
-            })
-          },
-          {
-            rotate: current.progress.interpolate({
-              inputRange: [0, 1],
-              outputRange: [1, 0]
-            })
-          },
-          {
-            scale: next
-              ? next.progress.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [1, 0.9]
-                })
-              : 1
-          }
-        ]
-      },
-      overlayStyle: {
-        opacity: current.progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [0, 0.5]
-        })
-      }
-    };
-  }
-};
+// const config = {
+//   animation: "timing",
+//   config: {
+//     duration: 500
+//   }
+// };
+// const MyTransition = {
+//   gestureDirection: "horizontal",
+//   transitionSpec: {
+//     open: config,
+//     close: config
+//   },
+//   headerStyleInterpolator: HeaderStyleInterpolators.forFade,
+//   cardStyleInterpolator: ({ current, next, layouts }) => {
+//     return {
+//       cardStyle: {
+//         opacity: current.progress.interpolate({
+//           inputRange: [0, 0.5, 1],
+//           outputRange: [0, 0.25, 1]
+//         }),
+//         transform: [
+//           {
+//             translateX: current.progress.interpolate({
+//               inputRange: [0, 1],
+//               outputRange: [layouts.screen.width, 0]
+//             })
+//           },
+//           {
+//             rotate: current.progress.interpolate({
+//               inputRange: [0, 1],
+//               outputRange: [1, 0]
+//             })
+//           },
+//           {
+//             scale: next
+//               ? next.progress.interpolate({
+//                   inputRange: [0, 1],
+//                   outputRange: [1, 0.9]
+//                 })
+//               : 1
+//           }
+//         ]
+//       },
+//       overlayStyle: {
+//         opacity: current.progress.interpolate({
+//           inputRange: [0, 1],
+//           outputRange: [0, 0.5]
+//         })
+//       }
+//     };
+//   }
+// };
 
 const headerStyle = {
   backgroundColor: "#2f2f2f",
